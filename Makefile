@@ -28,4 +28,7 @@ kibana:
 elasticsearch:
 	IMAGE=elasticsearch make dockerx
 
-all: elasticsearch logstash kibana
+all: clean elasticsearch logstash kibana
+
+clean:
+	cd dockerfiles && git checkout . && git checkout master
