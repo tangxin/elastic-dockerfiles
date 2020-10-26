@@ -20,14 +20,17 @@ dockerx: prepare
 		--file Dockerfile \
 		--build-arg VERSION=$(VERSION) .
 
-
-logstash:
+docker.logstash:
 	IMAGE=logstash make dockerx
 
-kibana:
+docker.kibana:
 	IMAGE=kibana make dockerx
 
-all: clean elasticsearch elasticsearch-oss logstash kibana
+docker.es:
+	make elasticsearch
+	make elasticsearch.oss
+
+docker.all: docker.logstash docker.kibana docker.es
 
 sync:
 	cd sync && \
@@ -38,8 +41,10 @@ sync:
 
 elasticsearch:
 	FROM=docker.elastic.co/elasticsearch/elasticsearch:7.9.2 IMAGE=elasticsearch make sync -B
-elasticsearch-oss:
+elasticsearch.oss:
 	FROM=docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.2 IMAGE=elasticsearch-oss make sync -B
 
-clean:
+checkout.reset:
 	cd dockerfiles && git checkout . && git checkout master
+
+checkout.version: prepare
