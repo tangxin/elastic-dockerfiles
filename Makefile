@@ -30,7 +30,7 @@ docker.es:
 	make elasticsearch
 	make elasticsearch.oss
 
-docker.all: docker.logstash docker.kibana docker.es
+docker.all: docker.es docker.logstash docker.kibana
 
 sync:
 	cd sync && \
