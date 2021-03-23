@@ -12,9 +12,9 @@ sync from https://www.docker.elastic.co/r/elasticsearch
 
 build from `logstash` [Dockerfile](dockerfiles/logstash/Dockerfile) with [logstash patch](patch/logstash/patch.sh)
 
-## `kubeimage/logstash:${version}`
+## `kubeimage/kibana:${version}`
 
-build from `kibana` [Dockerfile](dockerfiles/logstash/Dockerfile) with [kibana patch](patch/kibana/patch.sh)
+build from `kibana` [Dockerfile](dockerfiles/kibana/Dockerfile) with [kibana patch](patch/kibana/patch.sh)
 
 # Notify
 

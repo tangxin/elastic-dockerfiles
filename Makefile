@@ -22,7 +22,7 @@ dockerx: checkout.version
 		--build-arg VERSION=$(VERSION) .
 
 docker.logstash:
-	FROM=docker.elastic.co/logstash/logstash:$(VERSION) IMAGE=logstash make sync -B
+	IMAGE=logstash make dockerx
 
 docker.kibana:
 	IMAGE=kibana make dockerx

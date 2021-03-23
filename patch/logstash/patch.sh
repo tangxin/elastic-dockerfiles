@@ -5,6 +5,7 @@ cd $(dirname $0)
 DOCKERFILE=../../dockerfiles/logstash/Dockerfile
 
 
+sed -i 's/x86_64/$(uname -m)/g' ${DOCKERFILE}
 sed -i '/elastic-logstash-env2yaml/d' ${DOCKERFILE}
 sed -i '/ARG TARGETARCH/d' ${DOCKERFILE}
 
