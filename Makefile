@@ -29,9 +29,9 @@ docker.kibana:
 
 docker.es:
 	make elasticsearch
-	make elasticsearch.oss
+	# make elasticsearch.oss
 
-docker.all: docker.es docker.logstash docker.kibana
+docker.all: checkout.version docker.es docker.logstash docker.kibana
 
 sync:
 	cd sync && \
