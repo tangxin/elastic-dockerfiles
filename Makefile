@@ -3,15 +3,16 @@ REGISTRY ?= docker.io
 GROUP ?= kubeimages
 IMAGE ?= logstash
 
-prepare:
+prepare: checkout.reset
 	cd dockerfiles && \
 	git submodule update --init --recursive && \
+	git pull && \
 	git checkout v$(VERSION)
 
 patch:
 	bash -x patch/$(IMAGE)/patch.sh
 
-dockerx: prepare
+dockerx: checkout.version
 	make patch -B || echo ""
 	cd dockerfiles/$(IMAGE) && \
 	docker buildx build --push --platform=linux/amd64,linux/arm64 \
@@ -21,7 +22,7 @@ dockerx: prepare
 		--build-arg VERSION=$(VERSION) .
 
 docker.logstash:
-	IMAGE=logstash make dockerx
+	FROM=docker.elastic.co/logstash/logstash:$(VERSION) IMAGE=logstash make sync -B
 
 docker.kibana:
 	IMAGE=kibana make dockerx
@@ -36,13 +37,13 @@ sync:
 	cd sync && \
 	docker buildx build --push --platform=linux/amd64,linux/arm64 \
 		--tag $(REGISTRY)/$(GROUP)/$(IMAGE):$(VERSION) \
-		--file Dockerfile \
+		--file Dockerfile.merge \
 		--build-arg FROM=$(FROM) .
 
 elasticsearch:
-	FROM=docker.elastic.co/elasticsearch/elasticsearch:7.9.2 IMAGE=elasticsearch make sync -B
+	FROM=docker.elastic.co/elasticsearch/elasticsearch:$(VERSION) IMAGE=elasticsearch make sync -B
 elasticsearch.oss:
-	FROM=docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.2 IMAGE=elasticsearch-oss make sync -B
+	FROM=docker.elastic.co/elasticsearch/elasticsearch-oss:$(VERSION) IMAGE=elasticsearch-oss make sync -B
 
 checkout.reset:
 	cd dockerfiles && git checkout . && git checkout master

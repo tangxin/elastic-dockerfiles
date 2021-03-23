@@ -1,2 +1,0 @@
-ARG FROM 
-FROM ${FROM}
